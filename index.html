@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hapvida RMSP — Painel de Dashboards</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul:   #185FA5;
+      --header: #0f2d52;
+      --verde:  #1D9E75;
+      --laranja:#D85A30;
+      --bg:     #f0f2f5;
+      --card:   #ffffff;
+      --border: #e2e6ea;
+      --text:   #1a1a2e;
+      --text2:  #6b7280;
+      --shadow: 0 2px 8px rgba(0,0,0,0.08);
+      --radius: 12px;
+    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* LOGIN OVERLAY */
+    #login-overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    #login-overlay.hidden { display: none; }
+    .login-box { background: var(--card); border-radius: var(--radius); box-shadow: 0 4px 24px rgba(0,0,0,.12); padding: 44px 40px; width: 100%; max-width: 380px; text-align: center; }
+    .login-logo { width: 64px; height: 64px; background: var(--header); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 28px; color: #fff; font-weight: 800; letter-spacing: -1px; }
+    .login-box h2 { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .login-box p { font-size: 13px; color: var(--text2); margin-bottom: 28px; }
+    .login-box input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text); outline: none; margin-bottom: 12px; letter-spacing: 3px; text-align: center; }
+    .login-box input:focus { border-color: var(--azul); }
+    .login-box button { width: 100%; padding: 12px; background: var(--header); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s; }
+    .login-box button:hover { background: var(--azul); }
+    .login-error { font-size: 12px; color: #c0392b; margin-top: 10px; min-height: 16px; }
+
+    /* HEADER */
+    .header { background: var(--header); color: #fff; padding: 18px 32px; display: flex; align-items: center; gap: 16px; }
+    .header-logo { width: 44px; height: 44px; background: rgba(255,255,255,.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; flex-shrink: 0; }
+    .header-text h1 { font-size: 18px; font-weight: 700; }
+    .header-text p { font-size: 12px; opacity: .65; margin-top: 2px; }
+
+    /* MAIN */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px; }
+    .section-title { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 16px; }
+
+    /* GRID DE CARDS */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
+    .dash-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1.5px solid transparent;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color .15s, box-shadow .15s, transform .15s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .dash-card:hover { border-color: var(--azul); box-shadow: 0 6px 20px rgba(24,95,165,.15); transform: translateY(-2px); }
+
+    .card-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .card-icon.azul   { background: #e6f1fb; }
+    .card-icon.verde  { background: #e1f5ee; }
+    .card-icon.laranja{ background: #fdeee8; }
+
+    .card-body { flex: 1; }
+    .card-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .card-desc  { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+    .card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border); }
+    .card-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+    .tag-ativo { background: #e1f5ee; color: #0f6e56; }
+    .card-link { font-size: 12px; font-weight: 600; color: var(--azul); display: flex; align-items: center; gap: 4px; }
+    .card-link svg { width: 13px; height: 13px; }
+
+    /* FOOTER */
+    .footer { text-align: center; padding: 28px; font-size: 11px; color: var(--text2); margin-top: 8px; }
+
+    @media(max-width: 600px) {
+      .header { padding: 14px 16px; }
+      .wrap { padding: 20px 14px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">H</div>
+    <h2>Hapvida RMSP</h2>
+    <p>Painel de Dashboards — acesso restrito</p>
+    <input type="password" id="login-input" placeholder="Digite a senha" autocomplete="current-password" />
+    <button onclick="checkLogin()">Entrar</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">H</div>
+  <div class="header-text">
+    <h1>Hapvida RMSP</h1>
+    <p>Painel de Dashboards</p>
+  </div>
+</div>
+
+<!-- CONTEÚDO -->
+<div class="wrap">
+  <div class="section-title">Dashboards disponíveis</div>
+  <div class="grid">
+
+    <!-- Rede de Atendimento -->
+    <a class="dash-card" href="https://redermsp.vercel.app" target="_blank">
+      <div class="card-icon azul">🏥</div>
+      <div class="card-body">
+        <div class="card-title">Rede de Atendimento RMSP</div>
+        <div class="card-desc">Hospitais, laboratórios e cobertura por produto na Região Metropolitana de São Paulo.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-tag tag-ativo">Ativo</span>
+        <span class="card-link">
+          Acessar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- Vendas Diária -->
+    <a class="dash-card" href="https://vendas-diaria-deploy.vercel.app" target="_blank">
+      <div class="card-icon verde">📊</div>
+      <div class="card-body">
+        <div class="card-title">Vendas Diária 2026</div>
+        <div class="card-desc">Acompanhamento diário de vendas, metas e indicadores comerciais para 2026.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-tag tag-ativo">Ativo</span>
+        <span class="card-link">
+          Acessar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<div class="footer">Hapvida Assistência Médica · RMSP · 2026</div>
+
+<script>
+(function(){
+  const KEY = 'hapvida_hub_auth';
+  if(sessionStorage.getItem(KEY)==='1'){
+    document.getElementById('login-overlay').classList.add('hidden');
+  }
+  document.getElementById('login-input').addEventListener('keydown', function(e){
+    if(e.key==='Enter') checkLogin();
+  });
+})();
+
+function checkLogin(){
+  const val = document.getElementById('login-input').value;
+  if(val==='hapvida1234'){
+    sessionStorage.setItem('hapvida_hub_auth','1');
+    document.getElementById('login-overlay').classList.add('hidden');
+  } else {
+    document.getElementById('login-error').textContent = 'Senha incorreta. Tente novamente.';
+    document.getElementById('login-input').value = '';
+    document.getElementById('login-input').focus();
+  }
+}
+</script>
+</body>
+</html>
