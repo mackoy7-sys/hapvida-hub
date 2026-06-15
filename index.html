@@ -41,11 +41,11 @@
     .header-text p { font-size: 12px; opacity: .65; margin-top: 2px; }
 
     /* MAIN */
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px; }
+    .wrap { max-width: 1440px; margin: 0 auto; padding: 32px 20px; }
     .section-title { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 16px; }
 
     /* GRID DE CARDS */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 
     .dash-card {
       background: var(--card);
@@ -80,6 +80,9 @@
     /* FOOTER */
     .footer { text-align: center; padding: 28px; font-size: 11px; color: var(--text2); margin-top: 8px; }
 
+    @media(max-width: 1024px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
     @media(max-width: 600px) {
       .header { padding: 14px 16px; }
       .wrap { padding: 20px 14px; }
