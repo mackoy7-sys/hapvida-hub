@@ -18,9 +18,15 @@ INDEX = os.path.join(HERE, "index.html")
 
 # chave -> trecho do href que identifica o card
 CARDS = {
-    "vendas":      "vendas-diaria-deploy.vercel.app",
-    "conversao":   "conversao-time.vercel.app",
-    "atendimento": "atendimento-hapvida.vercel.app",
+    "vendas":         "vendas-diaria-deploy.vercel.app",
+    "conversao":      "conversao-time.vercel.app",
+    "atendimento":    "atendimento-hapvida.vercel.app",
+    "redermsp":       "redermsprj.vercel.app",
+    "vendas_digital": "vendas-digital-2025-2026.vercel.app",
+    "ofertaplanos":   "ofertaplanos.vercel.app",
+    "gup":            "leads-gup.vercel.app",
+    "eugenia":        "eugenia-seven.vercel.app",
+    "quem_indica":    "quem-indica.vercel.app",
 }
 
 def main():
