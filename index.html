@@ -300,6 +300,29 @@ function checkLogin(){
     document.getElementById('login-input').focus();
   }
 }
+
+// Ordena os cards pela data de atualização (mais recente primeiro)
+(function(){
+  function parseUpdate(card){
+    var el = card.querySelector('.card-update');
+    if(!el) return 0;
+    var m = el.textContent.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    if(!m) return 0;
+    return new Date(+m[3], +m[2]-1, +m[1]).getTime();
+  }
+  function sortCards(){
+    var grid = document.querySelector('.grid');
+    if(!grid) return;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.dash-card'));
+    cards.sort(function(a,b){ return parseUpdate(b) - parseUpdate(a); });
+    cards.forEach(function(c){ grid.appendChild(c); });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', sortCards);
+  } else {
+    sortCards();
+  }
+})();
 </script>
 </body>
 </html>
