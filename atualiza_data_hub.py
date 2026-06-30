@@ -27,6 +27,7 @@ CARDS = {
     "gup":            "leads-gup.vercel.app",
     "eugenia":        "eugenia-seven.vercel.app",
     "quem_indica":    "quem-indica.vercel.app",
+    "cac":            "cac-vgfq.vercel.app",
 }
 
 def main():
