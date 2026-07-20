@@ -28,6 +28,7 @@ CARDS = {
     "eugenia":        "eugenia-seven.vercel.app",
     "quem_indica":    "quem-indica.vercel.app",
     "cac":            "cac-vgfq.vercel.app",
+    "extrato":        "painelvendedores-hap.vercel.app",
 }
 
 def main():
